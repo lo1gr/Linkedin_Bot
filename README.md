@@ -15,3 +15,6 @@ the content of the file should be your linkedin credentials + the input for the 
 * message = ''
 * keyword = 'McGill'
 * job_title_contains = ['CEO','Data','Analytics','analyst']
+
+
+![Image of Yaktocat](https://octodex.github.com/images/yaktocat.png)

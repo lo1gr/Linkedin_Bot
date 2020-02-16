@@ -1,5 +1,5 @@
 # Linkedin_Bot
-# STILL A WORK IN PROGRESS - LMK IF YOU HAVE ANY COMMENTS/MANAGE TO MAKE IT WORK
+# STILL A WORK IN PROGRESS - LMK IF YOU HAVE ANY COMMENTS
 Linkedin Bot that takes for input:
 * a search keyword
 * a personalized message.  
@@ -16,5 +16,6 @@ the content of the file should be your linkedin credentials + the input for the 
 * keyword = 'McGill'
 * job_title_contains = ['CEO','Data','Analytics','analyst']
 
+The file structure in your folder should look like:
 ![Image of file_structure](https://github.com/lo1gr/Linkedin_Bot/blob/master/file_structure.png)
 ![Image of Yaktocat](https://octodex.github.com/images/yaktocat.png)

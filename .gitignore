@@ -1,3 +1,4 @@
 credentials.py
 results.txt
 .idea
+__pycache__

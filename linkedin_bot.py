@@ -72,6 +72,9 @@ class LinkedInScrapper():
 
 	def send_connection(self, note = True):
 		# include if has pending instead of connect
+		if self.count == self.total_count_allowed:
+			# will exit because will throw an error
+			0/0
 		try:
 			self.driver.find_element_by_xpath("//*[@class='pv-s-profile-actions pv-s-profile-actions--connect ml2 artdeco-button artdeco-button--2 artdeco-button--primary ember-view']").click()
 		except NoSuchElementException:

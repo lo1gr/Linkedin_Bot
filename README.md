@@ -15,6 +15,7 @@ the content of the file should be your linkedin credentials + the input for the 
 * message = ''
 * keyword = 'McGill'
 * job_title_contains = ['CEO','Data','Analytics','analyst']
+* total_count_allowed = 500 (so that do not add too many people in one day -> can be blocked by Linkedin)
 
 The file structure in your folder should look like:
 ![Image of file_structure](https://github.com/lo1gr/Linkedin_Bot/blob/master/file_structure.png)

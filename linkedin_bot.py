@@ -99,8 +99,6 @@ class LinkedInScrapper():
 		#This function queries all the buttons on the page
 		#adding notes/invitations to only users who have not connected with you
 
-		# class for connect button:
-
 		# do 2, then scroll down a bit
 		time.sleep(3)
 		self.driver.refresh()
@@ -126,15 +124,17 @@ class LinkedInScrapper():
 					unchecked_title = [x.text for x in job_desc][::2][:5]
 
 				f = open('results.txt','a')
-				f.write('len self message ' + str(len(self.message))   +'count' + str(self.count) + 'now-job: ' + str(unchecked_title[0].split(' ')) + 'test  ' + str(unchecked_title) +'unchecked: ' + str(unchecked) + '\n')
-				# f.write('unchecked: ' + str(unchecked) + 'now-job: ' + str(unchecked_title[i].split(' ')) + 'job title' + str(unchecked_title) + '\n')
+				f.write('unchecked: ' + str(unchecked) + 'now-job: ' + str(unchecked_title[0].split(' '))   + '\n')
 
 				time.sleep(2)
 
+				if unchecked[0] == 'LinkedIn Member':
+					unchecked = unchecked[1:]
+					unchecked_title = unchecked_title[1:]
+					continue
+
 				if len(self.job_title_contains) > 0:
-					if all_names[i].text == 'LinkedIn Member':
-						continue
-					elif any(job in unchecked_title[0].split(' ') for job in job_title_contains):
+					if any(job in unchecked_title[0].split(' ') for job in job_title_contains):
 						all_names[np.where(np.array(all_names_text) == unchecked[0])[0][0]].click()
 						unchecked = unchecked[1:]
 						unchecked_title = unchecked_title[1:]
@@ -153,29 +153,23 @@ class LinkedInScrapper():
 						unchecked_title = unchecked_title[1:]
 						continue
 				else:
-					if all_names[i].text == 'LinkedIn Member':
-						continue
-					else:
-						all_names[np.where(np.array(all_names_text) == unchecked[0])[0][0]].click()
-						unchecked = unchecked[1:]
-						unchecked_title = unchecked_title[1:]
-						time.sleep(3)
+					all_names[np.where(np.array(all_names_text) == unchecked[0])[0][0]].click()
+					unchecked = unchecked[1:]
+					unchecked_title = unchecked_title[1:]
+					time.sleep(3)
 
-						if self.connect == True:
-							if len(self.message) > 0:
-								self.send_connection()
-							else:
-								self.send_connection(note = False)
+					if self.connect == True:
+						if len(self.message) > 0:
+							self.send_connection()
+						else:
+							self.send_connection(note = False)
 
-						self.driver.execute_script("window.history.go(-1)")
+					self.driver.execute_script("window.history.go(-1)")
 
 			except NoSuchElementException:
 				self.send_notes()
 
 		f.write('second for loop'+'\n')
-
-		unchecked = []
-
 
 		for i in range(5,10):
 			try:
@@ -188,29 +182,39 @@ class LinkedInScrapper():
 				all_names = self.driver.find_elements_by_class_name("actor-name")
 				all_names_text = [x.text for x in all_names]
 
+				job_desc = self.driver.find_elements_by_xpath("//span[@dir='ltr']")
+				# only select the job titles, otherwise location is also chosen
+				job_desc_text = [x.text for x in job_desc][::2]
+
 				if i == 5:
 					unchecked = [x.text for x in all_names][5:]
+					unchecked_title = [x.text for x in job_desc][::2][5:]
 
 				f = open('results.txt','a')
-				f.write('iter loop:' + str(i) + ' ' + str(len(all_names)) + ' ' + str([x.text for x in all_names]) + ' ' + str(unchecked) + '\n')
+				f.write('iter loop:' + str(i) + 'unchecked: ' + str(unchecked) + '\n')
 
 				time.sleep(2)
 
 				if unchecked[0] == 'LinkedIn Member':
+					unchecked = unchecked[1:]
+					unchecked_title = unchecked_title[1:]
 					continue
 				else:
 					try:
 						all_names[np.where(np.array(all_names_text) == unchecked[0])[0][0]].click()
 						unchecked = unchecked[1:]
+						unchecked_title = unchecked_title[1:]
 					except ElementClickInterceptedException:
 						try:
 							self.driver.execute_script("window.scrollBy(0, -50)")
 							all_names[np.where(np.array(all_names_text) == unchecked[0])[0][0]].click()
 							unchecked = unchecked[1:]
+							unchecked_title = unchecked_title[1:]
 						except:
 							self.driver.execute_script("window.scrollBy(0, 80)")
 							all_names[np.where(np.array(all_names_text) == unchecked[0])[0][0]].click()
 							unchecked = unchecked[1:]
+							unchecked_title = unchecked_title[1:]
 
 					time.sleep(3)
 
@@ -226,8 +230,10 @@ class LinkedInScrapper():
 				self.send_notes()
 
 
+
+
 	def nextPage(self):
-		#Head to the next page
+		# Head to the next page
 		if self.sound_on:
 			subprocess.call(['afplay',"chinese-gong.wav"])
 		else:

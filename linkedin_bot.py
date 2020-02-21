@@ -1,3 +1,4 @@
+# /usr/local/bin/python3
 """
 	Desc: Bot to crawl onto linkedin and send out invitations to
 		  users based on search criteria and message.
@@ -46,6 +47,7 @@ class LinkedInScrapper():
 		self.job_title_contains = job_title_contains
 		self.total_count_allowed = total_count_allowed
 		self.count = 0
+		self.page_count = 1
 
 	def Login(self):
 		#lets get to the site
@@ -61,12 +63,13 @@ class LinkedInScrapper():
 	def Search(self):
 		#Lets search based on what keywords we chose
 		#lets first compose the URL
-		search_url = base_search_URL
+		self.search_url = base_search_URL
 		keywords = self.search.split(' ')
 		for word in keywords:
-			search_url += word + '%20'
-		search_url += "&origin=GLOBAL_SEARCH_HEADER"	#add the last word and the end parameters
-		self.driver.get(search_url)
+			self.search_url += word + '%20'
+		self.search_url += "&origin=GLOBAL_SEARCH_HEADER"	#add the last word and the end parameters
+		self.driver.get(self.search_url)
+
 		if self.sound_on:
 			subprocess.call(['afplay',"chinese-gong.wav"])
 
@@ -238,10 +241,19 @@ class LinkedInScrapper():
 			subprocess.call(['afplay',"chinese-gong.wav"])
 		else:
 			time.sleep(2)	#lets wait for page to load
-		self.driver.execute_script("window.scrollTo(0, document.body.scrollHeight)")
 
-		time.sleep(2)
-		self.driver.find_element_by_xpath("//button[@aria-label='Next']").click()
+		# page_count shall start at 1
+		self.page_count+=1
+		self.driver.get(self.search_url + "&page=" + str(self.page_count))
+
+
+		# too slow:
+
+
+		# self.driver.execute_script("window.scrollTo(0, document.body.scrollHeight)")
+		#
+		# time.sleep(2)
+		# self.driver.find_element_by_xpath("//button[@aria-label='Next']").click()
 
 
 
